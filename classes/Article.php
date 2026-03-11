@@ -34,7 +34,6 @@ class Article {
         $stmt->execute(['id' => $id]);
         return $stmt->fetch();
     }
-
     public function update($id, $title, $content) {
         $sql = "UPDATE articles SET title = :title, content = :content WHERE id = :id";
         $stmt = $this->pdo->prepare($sql);
