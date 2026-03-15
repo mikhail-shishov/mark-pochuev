@@ -26,15 +26,20 @@ if (empty($_SESSION['is_admin']) || $_SESSION['is_admin'] != 1) {
         <div class="col-md-8 mx-auto">
             <h1>Создание новой статьи</h1>
             
-            <form action="handlers/add_article.php" method="POST">
+            <form action="handlers/add_article.php" method="POST" enctype="multipart/form-data">
                 <div class="mb-3">
                     <label class="form-label">Заголовок статьи</label>
                     <input type="text" name="title" class="form-control" placeholder="Название статьи" required>
                 </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Основное изображение</label>
+                    <input type="file" name="image" class="form-control" accept="image/*">
+                </div>
                 
                 <div class="mb-3">
                     <label class="form-label">Текст статьи</label>
-                    <textarea name="content" class="form-control" rows="10" placeholder="Содержание..." required></textarea>
+                    <textarea name="content" id="editor" class="form-control" rows="10" placeholder="Содержание..."></textarea>
                 </div>
                 
                 <div class="d-flex justify-content-between">
@@ -45,6 +50,19 @@ if (empty($_SESSION['is_admin']) || $_SESSION['is_admin'] != 1) {
         </div>
     </div>
 </div>
+
+<script src="https://cdn.ckeditor.com/ckeditor5/41.1.0/classic/ckeditor.js"></script>
+<script>
+    ClassicEditor
+        .create(document.querySelector('#editor'), {
+            ckfinder: {
+                uploadUrl: 'handlers/upload_article_image.php'
+            }
+        })
+        .catch(error => {
+            console.error(error);
+        });
+</script>
 
 <?php include 'components/footer.php'; ?>
 

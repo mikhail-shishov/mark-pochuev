@@ -15,6 +15,12 @@ $error = $_GET['error'] ?? null;
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <title>Мой Блог - Главная</title>
+
+    <style>
+        img {
+            object-fit: cover;
+        }
+    </style>
 </head>
 <body class="bg-light">
 
@@ -81,20 +87,29 @@ $error = $_GET['error'] ?? null;
             <?php else: ?>
                 <?php foreach ($articles as $post): ?>
                     <div class="card mb-3">
-                        <div class="card-body">
-                            <h2 class="card-title">
-                                <a href="article.php?id=<?= $post['id'] ?>">
-                                    <?= htmlspecialchars($post['title']) ?>
-                                </a>
-                            </h2>
-                            <p class="text-muted">
-                                Автор: <?= htmlspecialchars($post['author_name'] ?? 'Неизвестен') ?> | 
-                                Дата: <?= date('d.m.Y H:i', strtotime($post['created_at'])) ?>
-                            </p>
-                            <p class="card-text">
-                                <?= nl2br(htmlspecialchars(mb_strimwidth($post['content'], 0, 300, "..."))) ?>
-                            </p>
-                            <a href="article.php?id=<?= $post['id'] ?>">Читать полностью →</a>
+                        <div class="row g-0">
+                            <?php if ($post['image']): ?>
+                                <div class="col-md-4">
+                                    <img src="<?= $post['image'] ?>" class="img-fluid rounded-start h-100" alt="<?= htmlspecialchars($post['title']) ?>">
+                                </div>
+                            <?php endif; ?>
+                            <div class="<?= $post['image'] ? 'col-md-8' : 'col-md-12' ?>">
+                                <div class="card-body">
+                                    <h2 class="card-title">
+                                        <a href="article.php?id=<?= $post['id'] ?>">
+                                            <?= htmlspecialchars($post['title']) ?>
+                                        </a>
+                                    </h2>
+                                    <p class="text-muted">
+                                        Автор: <?= htmlspecialchars($post['author_name'] ?? 'Неизвестен') ?> | 
+                                        Дата: <?= date('d.m.Y H:i', strtotime($post['created_at'])) ?>
+                                    </p>
+                                    <div class="card-text mb-3">
+                                        <?= mb_strimwidth(strip_tags($post['content']), 0, 200, "...") ?>
+                                    </div>
+                                    <a href="article.php?id=<?= $post['id'] ?>" class="btn btn-outline-primary btn-sm">Читать полностью →</a>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 <?php endforeach; ?>

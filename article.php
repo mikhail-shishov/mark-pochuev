@@ -34,6 +34,10 @@ if (!$article) {
     <div class="row">
         <div class="col-md-10 mx-auto">
             <article>
+                <?php if ($article['image']): ?>
+                    <img src="<?= $article['image'] ?>" alt="<?= htmlspecialchars($article['title']) ?>">
+                <?php endif; ?>
+
                 <h1><?= htmlspecialchars($article['title']) ?></h1>
                 
                 <p class="text-muted">
@@ -42,7 +46,8 @@ if (!$article) {
                 </p>
 
                 <div class="content mb-4">
-                    <?= nl2br(htmlspecialchars($article['content'])) ?>
+                    <?php //nl2br(htmlspecialchars($article['content'])) ?>
+                    <?= $article['content'] ?>
                 </div>
                 
                 <hr>

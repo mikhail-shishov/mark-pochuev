@@ -39,12 +39,19 @@ class User {
         return $this->pdo->query($sql)->fetchAll();
     }
 
-    public function updateRole($id, $isAdmin) {
-        $sql = "UPDATE users SET is_admin = :is_admin WHERE id = :id";
+    public function getById($id) {
+        $sql = "SELECT * FROM users WHERE id = :id";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute(['id' => $id]);
+        return $stmt->fetch();
+    }
+
+    public function updateAvatar($id, $avatar) {
+        $sql = "UPDATE users SET avatar = :avatar WHERE id = :id";
         $stmt = $this->pdo->prepare($sql);
         return $stmt->execute([
             'id' => $id,
-            'is_admin' => $isAdmin
+            'avatar' => $avatar
         ]);
     }
 }

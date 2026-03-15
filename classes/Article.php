@@ -6,14 +6,15 @@ class Article {
         $this->pdo = $pdo;
     }
 
-    public function create($userId, $title, $content) {
-        $sql = "INSERT INTO articles (user_id, title, content) 
-                VALUES (:user_id, :title, :content)";
+    public function create($userId, $title, $content, $image = null) {
+        $sql = "INSERT INTO articles (user_id, title, content, image) 
+                VALUES (:user_id, :title, :content, :image)";
         $stmt = $this->pdo->prepare($sql);
         return $stmt->execute([
             'user_id' => $userId,
             'title' => $title,
-            'content' => $content
+            'content' => $content,
+            'image' => $image
         ]);
     }
 
@@ -34,14 +35,25 @@ class Article {
         $stmt->execute(['id' => $id]);
         return $stmt->fetch();
     }
-    public function update($id, $title, $content) {
-        $sql = "UPDATE articles SET title = :title, content = :content WHERE id = :id";
+    public function update($id, $title, $content, $image = null) {
+        if ($image) {
+            $sql = "UPDATE articles SET title = :title, content = :content, image = :image WHERE id = :id";
+            $params = [
+                'id' => $id,
+                'title' => $title,
+                'content' => $content,
+                'image' => $image
+            ];
+        } else {
+            $sql = "UPDATE articles SET title = :title, content = :content WHERE id = :id";
+            $params = [
+                'id' => $id,
+                'title' => $title,
+                'content' => $content
+            ];
+        }
         $stmt = $this->pdo->prepare($sql);
-        return $stmt->execute([
-            'id' => $id,
-            'title' => $title,
-            'content' => $content
-        ]);
+        return $stmt->execute($params);
     }
 
     public function delete($id) {
