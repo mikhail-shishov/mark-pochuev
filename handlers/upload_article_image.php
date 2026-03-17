@@ -31,8 +31,11 @@ if (isset($_FILES['upload']) && $_FILES['upload']['error'] === UPLOAD_ERR_OK) {
         $projectRoot = str_replace('handlers/upload_article_image.php', '', $scriptName);
         
         $url = $projectRoot . 'uploads/articles/' . $fileName;
-        
-        echo json_encode(['url' => $url], JSON_UNESCAPED_SLASHES);
+
+        echo json_encode([
+            'uploaded' => true,
+            'url' => $url
+        ], JSON_UNESCAPED_SLASHES);
         exit();
     } else {
         echo json_encode(['error' => ['message' => 'Ошибка при перемещении файла']]);
