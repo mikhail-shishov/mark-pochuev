@@ -1,0 +1,11 @@
+{
+    "mcpServers": {
+        "laravel-boost": {
+            "command": "/Users/mikhailshishov/.config/herd-lite/bin/php",
+            "args": [
+                "/Applications/XAMPP/xamppfiles/htdocs/php-course/mark-pochuev/php_course/artisan",
+                "boost:mcp"
+            ]
+        }
+    }
+}
