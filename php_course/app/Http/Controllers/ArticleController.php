@@ -4,15 +4,18 @@ namespace App\Http\Controllers;
 
 use App\Models\Article;
 use Illuminate\Http\Request;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class ArticleController extends Controller
 {
+    use AuthorizesRequests;
+
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $articles = Article::all();
+        $articles = Article::latest()->get();
         return view('articles.index', compact('articles'));
     }
 
@@ -21,6 +24,7 @@ class ArticleController extends Controller
      */
     public function create()
     {
+        $this->authorize('create', Article::class);
         return view('articles.create');
     }
 
@@ -29,6 +33,8 @@ class ArticleController extends Controller
      */
     public function store(Request $request)
     {
+        $this->authorize('create', Article::class);
+
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'content' => 'required|string',
@@ -44,7 +50,7 @@ class ArticleController extends Controller
      */
     public function show(Article $article)
     {
-        //
+        return view('articles.show', compact('article'));
     }
 
     /**
@@ -52,7 +58,8 @@ class ArticleController extends Controller
      */
     public function edit(Article $article)
     {
-        //
+        $this->authorize('update', $article);
+        return view('articles.edit', compact('article'));
     }
 
     /**
@@ -60,7 +67,16 @@ class ArticleController extends Controller
      */
     public function update(Request $request, Article $article)
     {
-        //
+        $this->authorize('update', $article);
+
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
+            'content' => 'required|string',
+        ]);
+
+        $article->update($validated);
+
+        return redirect()->route('articles.index')->with('success', 'Статья была обновлена!');
     }
 
     /**
@@ -68,6 +84,9 @@ class ArticleController extends Controller
      */
     public function destroy(Article $article)
     {
-        //
+        $this->authorize('delete', $article);
+        $article->delete();
+
+        return redirect()->route('articles.index')->with('success', 'Статья была удалена!');
     }
 }
