@@ -24,4 +24,6 @@ Route::middleware('auth')->group(function () {
 
 Route::resource('articles', ArticleController::class);
 
+Route::post('upload', App\Http\Controllers\UploadController::class)->name('upload');
+
 require __DIR__.'/auth.php';

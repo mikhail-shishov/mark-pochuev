@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-#[Fillable(['name', 'last_name', 'email', 'password', 'role'])]
+#[Fillable(['name', 'last_name', 'email', 'password', 'role', 'avatar_id'])]
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable
 {
@@ -20,6 +20,20 @@ class User extends Authenticatable
     const ROLE_ADMIN = 'admin';
     const ROLE_MODERATOR = 'moderator';
     const ROLE_USER = 'user';
+
+    public function avatar()
+    {
+        return $this->belongsTo(Media::class, 'avatar_id');
+    }
+
+    public function getAvatarUrlAttribute()
+    {
+        if ($this->avatar) {
+            return $this->avatar->url;
+        }
+
+        return 'https://www.gravatar.com/avatar/' . md5(strtolower(trim($this->email))) . '?s=200&d=mp';
+    }
 
     public function isAdmin(): bool
     {
