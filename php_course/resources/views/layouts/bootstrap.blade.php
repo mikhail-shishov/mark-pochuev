@@ -6,6 +6,12 @@
     <title>{{ config('app.name', 'Laravel') }} - Статьи</title>
     <!-- Bootstrap CSS CDN -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script>
+        (function() {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            document.documentElement.setAttribute('data-bs-theme', savedTheme);
+        })();
+    </script>
     <style>
         body { padding-top: 5rem; }
     </style>
@@ -31,7 +37,12 @@
                         @endif
                     @endauth
                 </ul>
-                <ul class="navbar-nav ms-auto mb-2 mb-md-0">
+                <ul class="navbar-nav ms-auto mb-2 mb-md-0 align-items-center">
+                    <li class="nav-item me-3">
+                        <button class="btn btn-sm btn-outline-light" id="theme-toggle" title="Переключить тему">
+                            <span id="theme-icon">🌙</span>
+                        </button>
+                    </li>
                     @guest
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('login') }}">Войти</a>
@@ -79,7 +90,12 @@
         @yield('content')
     </main>
 
+    <button type="button" class="btn btn-primary btn-floating btn-lg" id="btn-back-to-top" style="position: fixed; bottom: 20px; right: 20px; display: none; border-radius: 50%; z-index: 1000;">
+        ↑
+    </button>
+
     <!-- Bootstrap JS Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    @vite(['resources/js/app.js'])
 </body>
 </html>

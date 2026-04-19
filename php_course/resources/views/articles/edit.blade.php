@@ -10,13 +10,17 @@
             <div class="mb-3">
                 <label for="title" class="form-label">Заголовок</label>
                 <input type="text" name="title" id="title" class="form-control @error('title') is-invalid @enderror" value="{{ old('title', $article->title) }}" required>
+                <div id="title-availability" class="form-text"></div>
                 @error('title')
                     <div class="invalid-feedback">{{ $message }}</div>
                 @enderror
             </div>
             <div class="mb-3">
                 <label for="content" class="form-label">Содержание</label>
-                <textarea name="content" id="content" rows="10" class="form-control @error('content') is-invalid @enderror" required>{{ old('content', $article->content) }}</textarea>
+                <textarea name="content" id="article-content" rows="10" class="form-control @error('content') is-invalid @enderror" required>{{ old('content', $article->content) }}</textarea>
+                <div class="text-end">
+                    Символов: <small class="text-muted" id="char-counter">0</small>
+                </div>
                 @error('content')
                     <div class="invalid-feedback">{{ $message }}</div>
                 @enderror

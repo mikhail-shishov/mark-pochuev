@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Article;
 use Illuminate\Http\Request;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Support\Facades\Http;
 
 class ArticleController extends Controller
 {
@@ -16,7 +17,19 @@ class ArticleController extends Controller
     public function index()
     {
         $articles = Article::latest()->get();
-        return view('articles.index', compact('articles'));
+
+        $pokemon = null;
+        try {
+            $randomId = rand(1, 151);
+            $response = Http::get("https://pokeapi.co/api/v2/pokemon/{$randomId}");
+            if ($response->successful()) {
+                $pokemon = $response->json();
+            }
+        } catch (\Exception $e) {
+            \Log::error("Error: " . $e->getMessage());
+        }
+
+        return view('articles.index', compact('articles', 'pokemon'));
     }
 
     /**
@@ -89,4 +102,15 @@ class ArticleController extends Controller
 
         return redirect()->route('articles.index')->with('success', 'Статья была удалена!');
     }
+
+//    public function checkTitle(Request $request)
+//    {
+//        $title = $request->query('title');
+//
+//        $exists = Article::where('title', $title)->exists();
+//
+//        return response()->json([
+//            'available' => !$exists
+//        ]);
+//    }
 }

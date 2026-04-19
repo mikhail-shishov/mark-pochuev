@@ -24,10 +24,10 @@
                         <a href="{{ route('articles.edit', $article) }}" class="btn btn-warning">Редактировать</a>
                     @endcan
                     @can('delete', $article)
-                        <form action="{{ route('articles.destroy', $article) }}" method="POST" onsubmit="return confirm('Вы уверены?');" class="d-inline">
+                        <form action="{{ route('articles.destroy', $article) }}" method="POST" class="d-inline" data-confirm-message="Удалить статью «{{ $article->title }}»?">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="btn btn-danger">Удалить</button>
+                            <button type="submit" class="btn btn-danger" data-bs-toggle="tooltip" title="Внимание! Это действие необратимо">Удалить</button>
                         </form>
                     @endcan
                 </div>

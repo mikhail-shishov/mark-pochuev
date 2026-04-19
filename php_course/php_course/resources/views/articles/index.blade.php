@@ -17,7 +17,7 @@
 
                             @auth
                                 @can('update', $article)
-                                    <a href="{{ route('articles.edit', $article) }}" class="btn btn-warning">Ред.</a>
+                                    <a href="{{ route('articles.edit', $article) }}" class="btn btn-warning">Редактировать</a>
                                 @endcan
                                 @can('delete', $article)
                                     <form action="{{ route('articles.destroy', $article) }}" method="POST" class="d-inline">

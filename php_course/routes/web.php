@@ -23,6 +23,7 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::resource('articles', ArticleController::class);
+Route::get('api/check-title', [ArticleController::class, 'checkTitle'])->name('articles.check-title');
 
 Route::post('upload', App\Http\Controllers\UploadController::class)->name('upload');
 
