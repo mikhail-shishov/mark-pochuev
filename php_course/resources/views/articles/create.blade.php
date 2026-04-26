@@ -24,6 +24,20 @@
                     <div class="invalid-feedback">{{ $message }}</div>
                 @enderror
             </div>
+            <div class="mb-3">
+                <label for="tags" class="form-label">Теги</label>
+                <select name="tags[]" id="tags" class="form-select @error('tags') is-invalid @enderror" multiple>
+                    @foreach($tags as $tag)
+                        <option value="{{ $tag->id }}" {{ (is_array(old('tags')) && in_array($tag->id, old('tags'))) ? 'selected' : '' }}>
+                            {{ $tag->name }}
+                        </option>
+                    @endforeach
+                </select>
+                <div class="form-text">Зажмите Ctrl (или Cmd), чтобы выбрать несколько тегов</div>
+                @error('tags')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
+            </div>
             <div class="d-flex justify-content-between">
                 <a href="{{ route('articles.index') }}" class="btn btn-secondary">Отмена</a>
                 <button type="submit" class="btn btn-primary" id="create-btn">Создать</button>

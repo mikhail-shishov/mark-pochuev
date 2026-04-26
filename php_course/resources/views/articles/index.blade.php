@@ -21,9 +21,15 @@
                     @endif
                     <div class="card-body">
                         <h5 class="card-title text-truncate">{{ $article->title }}</h5>
+                        <div class="mb-2">
+                            @foreach($article->tags as $tag)
+                                <span class="badge bg-secondary">{{ $tag->name }}</span>
+                            @endforeach
+                        </div>
                         <p class="card-text text-muted" style="display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;">
-                            {{ $article->content }}
+                            {{ strip_tags($article->content) }}
                         </p>
+                        <small class="text-muted">Автор: {{ $article->user->name ?? 'Неизвестен' }}</small>
                     </div>
                     <div class="card-footer bg-transparent border-top-0 d-flex justify-content-between align-items-center">
                         <a href="{{ route('articles.show', $article) }}" class="btn btn-sm btn-outline-primary">Читать</a>

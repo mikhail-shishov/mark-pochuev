@@ -37,7 +37,7 @@ class ArticlePolicy
      */
     public function update(User $user, Article $article): bool
     {
-        return $user->isAdmin() || $user->isModerator();
+        return $user->isAdmin() || $user->isModerator() || $user->id === $article->user_id;
     }
 
     /**

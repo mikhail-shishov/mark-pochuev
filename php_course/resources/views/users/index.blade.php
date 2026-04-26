@@ -45,7 +45,7 @@
                                         </option>
                                     @endforeach
                                 </select>
-                                <button type="submit" class="btn btn-sm btn-primary">Роль</button>
+                                <button type="submit" class="btn btn-sm btn-primary">Поменять роль</button>
                             </form>
 
                             <form action="{{ route('users.destroy', $user) }}" method="POST" data-confirm-message="Вы точно хотите удалить пользователя {{ $user->name }}?">

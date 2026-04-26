@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Article;
+use App\Models\Tag;
+use App\Services\ArticleService;
 use Illuminate\Http\Request;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Support\Facades\Http;
@@ -10,6 +12,13 @@ use Illuminate\Support\Facades\Http;
 class ArticleController extends Controller
 {
     use AuthorizesRequests;
+
+    protected $articleService;
+
+    public function __construct(ArticleService $articleService)
+    {
+        $this->articleService = $articleService;
+    }
 
     /**
      * Display a listing of the resource.
@@ -38,7 +47,8 @@ class ArticleController extends Controller
     public function create()
     {
         $this->authorize('create', Article::class);
-        return view('articles.create');
+        $tags = Tag::all();
+        return view('articles.create', compact('tags'));
     }
 
     /**
@@ -51,9 +61,14 @@ class ArticleController extends Controller
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'content' => 'required|string',
+            'tags' => 'array',
         ]);
 
-        Article::create($validated);
+        $article = auth()->user()->articles()->create($validated);
+
+        if ($request->has('tags')) {
+            $article->tags()->sync($request->tags);
+        }
 
         return redirect()->route('articles.index')->with('success', 'Статья была создана!');
     }
@@ -66,7 +81,10 @@ class ArticleController extends Controller
         if (!auth()->check()) {
             return redirect()->route('login');
         }
-        return view('articles.show', compact('article'));
+
+        $relatedArticles = $this->articleService->getRelatedArticles($article);
+
+        return view('articles.show', compact('article', 'relatedArticles'));
     }
 
     /**
@@ -75,7 +93,8 @@ class ArticleController extends Controller
     public function edit(Article $article)
     {
         $this->authorize('update', $article);
-        return view('articles.edit', compact('article'));
+        $tags = Tag::all();
+        return view('articles.edit', compact('article', 'tags'));
     }
 
     /**
@@ -88,9 +107,16 @@ class ArticleController extends Controller
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'content' => 'required|string',
+            'tags' => 'array',
         ]);
 
         $article->update($validated);
+
+        if ($request->has('tags')) {
+            $article->tags()->sync($request->tags);
+        } else {
+            $article->tags()->detach();
+        }
 
         return redirect()->route('articles.index')->with('success', 'Статья была обновлена!');
     }
