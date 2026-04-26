@@ -9,7 +9,7 @@
             <div class="mb-3">
                 <label for="title" class="form-label">Заголовок</label>
                 <input type="text" name="title" id="title" class="form-control @error('title') is-invalid @enderror" value="{{ old('title') }}" required>
-                <div id="title-availability" class="form-text"></div>
+                <div id="title-avail" class="form-text"></div>
                 @error('title')
                     <div class="invalid-feedback">{{ $message }}</div>
                 @enderror
@@ -26,7 +26,7 @@
             </div>
             <div class="d-flex justify-content-between">
                 <a href="{{ route('articles.index') }}" class="btn btn-secondary">Отмена</a>
-                <button type="submit" class="btn btn-primary">Создать</button>
+                <button type="submit" class="btn btn-primary" id="create-btn">Создать</button>
             </div>
         </form>
     </div>

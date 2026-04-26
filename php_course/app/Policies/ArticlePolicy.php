@@ -29,7 +29,7 @@ class ArticlePolicy
      */
     public function create(User $user): bool
     {
-        return $user->canManageArticles();
+        return $user->isAdmin() || $user->isModerator();
     }
 
     /**
@@ -37,7 +37,7 @@ class ArticlePolicy
      */
     public function update(User $user, Article $article): bool
     {
-        return $user->canManageArticles();
+        return $user->isAdmin() || $user->isModerator();
     }
 
     /**
@@ -45,7 +45,7 @@ class ArticlePolicy
      */
     public function delete(User $user, Article $article): bool
     {
-        return $user->canManageArticles();
+        return $user->isAdmin();
     }
 
     /**

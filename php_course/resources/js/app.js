@@ -98,4 +98,46 @@ document.addEventListener('DOMContentLoaded', () => {
             bsAlert.close();
         }, 5000);
     });
+
+    // check if title exists by API
+    const titleInput = document.getElementById('title');
+    const titleAvail = document.getElementById('title-avail');
+
+    if (titleInput && titleAvail) {
+        let timeout = null;
+
+        titleInput.addEventListener("input", () => {
+            clearTimeout(timeout);
+            const title = titleInput.value;
+
+            if (title.length < 1) {
+                titleAvail.innerText = '';
+                return;
+            }
+
+            timeout = setTimeout(async () => {
+                // titleAvail.innerText = "Проверка, подождите..."
+
+                try {
+                    const response = await fetch(`/api/check-title?title=${encodeURIComponent(title)}`);
+                    const data = await response.json();
+
+                    if (data.available) {
+                        titleAvail.innerText = "Заголовок свободен";
+                        titleAvail.classList.remove('text-danger');
+                        titleAvail.classList.add('text-success');
+                        document.getElementById('create-btn').classList.remove("disabled");
+                    } else {
+                        titleAvail.innerText = "Этот заголовок уже используется";
+                        titleAvail.classList.remove('text-success');
+                        titleAvail.classList.add('text-danger');
+                        document.getElementById('create-btn').classList.add("disabled");
+                    }
+                } catch (error) {
+                    titleAvail.innerText = "Ошибка подключения";
+                }
+            }, 500)
+        })
+    }
+
 });

@@ -63,6 +63,9 @@ class ArticleController extends Controller
      */
     public function show(Article $article)
     {
+        if (!auth()->check()) {
+            return redirect()->route('login');
+        }
         return view('articles.show', compact('article'));
     }
 
@@ -103,14 +106,14 @@ class ArticleController extends Controller
         return redirect()->route('articles.index')->with('success', 'Статья была удалена!');
     }
 
-//    public function checkTitle(Request $request)
-//    {
-//        $title = $request->query('title');
-//
-//        $exists = Article::where('title', $title)->exists();
-//
-//        return response()->json([
-//            'available' => !$exists
-//        ]);
-//    }
+    public function checkTitle(Request $request)
+    {
+        $title = $request->query('title');
+
+        $exists = Article::where('title', $title)->exists();
+
+        return response()->json([
+            'available' => !$exists
+        ]);
+    }
 }

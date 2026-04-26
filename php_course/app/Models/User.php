@@ -11,8 +11,9 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use App\Notifications\ResetPassword as ResetPasswordNotification;
 use App\Notifications\VerifyEmail as VerifyEmailNotification;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-#[Fillable(['name', 'last_name', 'email', 'password', 'role', 'avatar_id'])]
+#[Fillable(['name', 'last_name', 'email', 'password', 'role_id', 'avatar_id'])]
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable implements MustVerifyEmail
 {
@@ -28,6 +29,11 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->belongsTo(Media::class, 'avatar_id');
     }
 
+    public function role(): BelongsTo
+    {
+        return $this->belongsTo(Role::class);
+    }
+
     public function getAvatarUrlAttribute()
     {
         if ($this->avatar) {
@@ -39,17 +45,17 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function isAdmin(): bool
     {
-        return $this->role === self::ROLE_ADMIN;
+        return $this->role?->slug === self::ROLE_ADMIN;
     }
 
     public function isModerator(): bool
     {
-        return $this->role === self::ROLE_MODERATOR;
+        return $this->role?->slug === self::ROLE_MODERATOR;
     }
 
     public function isUser(): bool
     {
-        return $this->role === self::ROLE_USER;
+        return $this->role?->slug === self::ROLE_USER;
     }
 
     public function sendEmailVerificationNotification(): void

@@ -19,10 +19,16 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     Route::get('/users', [UserController::class, 'index'])->name('users.index');
+    Route::get('/users/create', [UserController::class, 'create'])->name('users.create');
+    Route::post('/users', [UserController::class, 'store'])->name('users.store');
+    Route::get('/users/{user}/edit', [UserController::class, 'edit'])->name('users.edit');
+    Route::put('/users/{user}', [UserController::class, 'update'])->name('users.update');
+    Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
     Route::patch('/users/{user}/role', [UserController::class, 'updateRole'])->name('users.update-role');
 });
 
 Route::resource('articles', ArticleController::class);
+
 Route::get('api/check-title', [ArticleController::class, 'checkTitle'])->name('articles.check-title');
 
 Route::post('upload', App\Http\Controllers\UploadController::class)->name('upload');
